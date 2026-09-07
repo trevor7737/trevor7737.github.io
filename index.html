@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trevor Foster — Who Am I</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0f1b2b;
+    --panel: #16273a;
+    --panel-line: #2a3f56;
+    --text: #e7ecf1;
+    --muted: #8ea0b5;
+    --amber: #e8a23d;
+    --teal: #5fb3ac;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      linear-gradient(var(--panel-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--panel-line) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: -1px -1px;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .whoami {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 72px 28px 96px;
+  }
+
+  /* ---- header strip ---- */
+  .strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--panel-line);
+    padding-bottom: 14px;
+    margin-bottom: 48px;
+  }
+  .strip span.dot {
+    color: var(--teal);
+  }
+
+  /* ---- hero ---- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .hero h1 {
+    font-size: clamp(34px, 5vw, 50px);
+    line-height: 1.08;
+    font-weight: 600;
+    margin: 0 0 22px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--amber);
+  }
+
+  .hero p {
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: #c7d1dc;
+    max-width: 62ch;
+    margin: 0 0 16px;
+  }
+
+  .trace {
+    width: 64px;
+    height: 3px;
+    background: var(--teal);
+    margin-bottom: 24px;
+    transform-origin: left;
+    animation: draw 0.9s ease-out;
+  }
+  @keyframes draw {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trace { animation: none; }
+  }
+
+  /* ---- spec panel ---- */
+  .spec {
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 4px;
+    padding: 22px 22px 18px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--panel-line);
+    font-size: 13px;
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-row .k { color: var(--muted); }
+  .spec-row .v { color: var(--text); text-align: right; }
+
+  /* ---- tag groups (skills) ---- */
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--teal);
+    letter-spacing: 0.08em;
+    margin: 56px 0 14px;
+  }
+
+  .taggroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: #d7e0ea;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 3px;
+    padding: 6px 10px;
+  }
+
+  /* ---- log / highlights ---- */
+  .log {
+    margin-top: 8px;
+    border-left: 2px solid var(--panel-line);
+    padding-left: 24px;
+  }
+
+  .entry {
+    position: relative;
+    padding-bottom: 26px;
+  }
+  .entry:last-child { padding-bottom: 0; }
+
+  .entry::before {
+    content: '';
+    position: absolute;
+    left: -29px;
+    top: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--amber);
+  }
+
+  .entry .when {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .entry h3 {
+    font-size: 16.5px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: var(--text);
+  }
+
+  .entry p {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #b9c5d2;
+    margin: 0;
+    max-width: 62ch;
+  }
+
+  /* ---- footer links ---- */
+  .links {
+    display: flex;
+    gap: 22px;
+    margin-top: 56px;
+    padding-top: 22px;
+    border-top: 1px solid var(--panel-line);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+  .links a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+  }
+  .links a:hover,
+  .links a:focus-visible {
+    border-bottom-color: var(--teal);
+  }
+  .links a:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 720px) {
+    .hero { grid-template-columns: 1fr; }
+    .whoami { padding: 48px 20px 64px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="whoami">
+
+  <div class="strip">
+    <span><span class="dot">●</span> WHO_AM_I.md</span>
+    <span>DUKE PRATT SCHOOL OF ENGINEERING · NC</span>
+  </div>
+
+  <div class="hero">
+    <div>
+      <div class="trace"></div>
+      <h1>I build the parts of a system<br>that <em>sense, move, and decide.</em></h1>
+      <p>
+        I'm Trevor, an Electrical &amp; Computer Engineering student at Duke, concentrating in
+        machine learning. Most of what I build sits at the boundary between hardware and
+        software — a wristband that talks to a microcontroller, a blinds system that reads
+        the room, a robot that has to decide what it's looking at in real time.
+      </p>
+      <p>
+        I spent last summer at Hong Kong's Applied Science &amp; Technology Research
+        Institute validating 5G radio performance, and before Duke I co-founded two
+        startups and captained a robotics team to a world championship. I like projects
+        with a physical output — something that lights up, moves, or reminds someone to
+        take their medication.
+      </p>
+    </div>
+
+    <div class="spec">
+      <div class="spec-row"><span class="k">based in</span><span class="v">Durham, NC</span></div>
+      <div class="spec-row"><span class="k">program</span><span class="v">B.S.E., ECE</span></div>
+      <div class="spec-row"><span class="k">focus</span><span class="v">Machine Learning</span></div>
+      <div class="spec-row"><span class="k">gpa</span><span class="v">3.787</span></div>
+      <div class="spec-row"><span class="k">graduating</span><span class="v">May 2029</span></div>
+      <div class="spec-row"><span class="k">status</span><span class="v">open to internships</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">LANGUAGES &amp; TOOLS</div>
+  <div class="taggroup">
+    <span class="tag">Python</span>
+    <span class="tag">Java</span>
+    <span class="tag">JavaScript</span>
+    <span class="tag">TypeScript</span>
+    <span class="tag">C++</span>
+    <span class="tag">HTML / CSS</span>
+  </div>
+  <div class="taggroup">
+    <span class="tag">Computer Vision</span>
+    <span class="tag">Object Detection</span>
+    <span class="tag">Microcontrollers</span>
+    <span class="tag">5G NR</span>
+    <span class="tag">Linux</span>
+    <span class="tag">Cloud Computing</span>
+    <span class="tag">Encryption</span>
+    <span class="tag">UI / UX</span>
+  </div>
+
+  <div class="section-label">A FEW THINGS I'VE BUILT</div>
+  <div class="log">
+
+    <div class="entry">
+      <span class="when">2026 · Published, World Journal of Engineering &amp; Technology</span>
+      <h3>Automated light-responsive blinds controller</h3>
+      <p>
+        Co-designed a system that reads ambient light and adjusts blinds automatically,
+        combining sensors, control logic, and hardware to cut energy use and keep a room
+        comfortable without anyone touching a switch.
+      </p>
+    </div>
+
+    <div class="entry">
+      <span class="when">2025 · Duke Engineering Project</span>
+      <h3>ADHD medication reminder system</h3>
+      <p>
+        Built a low-friction reminder device for people with ADHD: a dock that flashes and
+        sounds, paired with a wristband that vibrates and only stops the alert once it's
+        tapped against an NFC scanner. Runs on ESP32 microcontrollers over Bluetooth Low Energy.
+      </p>
+    </div>
+
+    <div class="entry">
+      <span class="when">2022 – 2024 · Software Architect, Next Gen Technology 360</span>
+      <h3>Two apps, one $3,000 prize</h3>
+      <p>
+        Built Ninja Tax, which helps first-time filers find deductions, and Shelf-Sense, an
+        AI-powered inventory tracker. Both were invited to exhibit at Synapse Summit,
+        Florida's largest innovation conference.
+      </p>
+    </div>
+
+    <div class="entry">
+      <span class="when">2021 – 2025 · Captain, FTC Robotics Team 516</span>
+      <h3>World Championship, Houston</h3>
+      <p>
+        Led the team from regional to state to the FTC World Championship, writing the
+        autonomous stack: object detection, odometry, and gyroscope-based turning.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="links">
+    <a href="mailto:trevor.foster@duke.edu">trevor.foster@duke.edu</a>
+    <a href="https://www.linkedin.com/in/trevor-foster-duke" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="tel:+17275159525">(727) 515-5925</a>
+  </div>
+
+</section>
+
+</body>
+</html>
