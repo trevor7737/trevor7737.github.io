@@ -21,12 +21,13 @@
 
   body {
     margin: 0;
-    background: var(--bg);
+    background-color: var(--bg);
     background-image:
-      linear-gradient(var(--panel-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--panel-line) 1px, transparent 1px);
-    background-size: 32px 32px;
-    background-position: -1px -1px;
+      radial-gradient(circle at 15% 8%, rgba(232, 162, 61, 0.07), transparent 42%),
+      radial-gradient(circle at 88% 78%, rgba(95, 179, 172, 0.08), transparent 45%),
+      radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+    background-size: auto, auto, 26px 26px;
+    background-position: 0 0, 0 0, -1px -1px;
     color: var(--text);
     font-family: 'Space Grotesk', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -57,10 +58,7 @@
 
   /* ---- hero ---- */
   .hero {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    gap: 48px;
-    align-items: start;
+    max-width: 62ch;
   }
 
   .hero h1 {
@@ -100,50 +98,13 @@
     .trace { animation: none; }
   }
 
-  /* ---- spec panel ---- */
-  .spec {
-    background: var(--panel);
-    border: 1px solid var(--panel-line);
-    border-radius: 4px;
-    padding: 22px 22px 18px;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-  .spec-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 9px 0;
-    border-bottom: 1px solid var(--panel-line);
-    font-size: 13px;
-  }
-  .spec-row:last-child { border-bottom: none; }
-  .spec-row .k { color: var(--muted); }
-  .spec-row .v { color: var(--text); text-align: right; }
-
-  /* ---- tag groups (skills) ---- */
+  /* ---- section labels ---- */
   .section-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     color: var(--teal);
     letter-spacing: 0.08em;
     margin: 56px 0 14px;
-  }
-
-  .taggroup {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 22px;
-  }
-
-  .tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12.5px;
-    color: #d7e0ea;
-    background: var(--panel);
-    border: 1px solid var(--panel-line);
-    border-radius: 3px;
-    padding: 6px 10px;
   }
 
   /* ---- log / highlights ---- */
@@ -182,16 +143,30 @@
   .entry h3 {
     font-size: 16.5px;
     font-weight: 600;
-    margin: 0 0 6px;
+    margin: 0 0 12px;
     color: var(--text);
   }
 
-  .entry p {
-    font-size: 14.5px;
-    line-height: 1.6;
-    color: #b9c5d2;
-    margin: 0;
-    max-width: 62ch;
+  .view-btn {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--amber);
+    background: transparent;
+    border: 1px solid var(--amber);
+    border-radius: 3px;
+    padding: 7px 14px;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .view-btn:hover,
+  .view-btn:focus-visible {
+    background: var(--amber);
+    color: var(--bg);
+  }
+  .view-btn:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
   }
 
   /* ---- footer links ---- */
@@ -221,7 +196,6 @@
   }
 
   @media (max-width: 720px) {
-    .hero { grid-template-columns: 1fr; }
     .whoami { padding: 48px 20px 64px; }
   }
 </style>
@@ -264,66 +238,48 @@
     </div>
   </div>
 
-  <div class="section-label">LANGUAGES &amp; TOOLS</div>
-  <div class="taggroup">
-    <span class="tag">Python</span>
-    <span class="tag">Java</span>
-    <span class="tag">JavaScript</span>
-    <span class="tag">TypeScript</span>
-    <span class="tag">C++</span>
-    <span class="tag">HTML / CSS</span>
-  </div>
-  <div class="taggroup">
-    <span class="tag">Computer Vision</span>
-    <span class="tag">Object Detection</span>
-    <span class="tag">Microcontrollers</span>
-    <span class="tag">5G NR</span>
-    <span class="tag">Linux</span>
-    <span class="tag">Cloud Computing</span>
-    <span class="tag">Encryption</span>
-    <span class="tag">UI / UX</span>
-  </div>
-
-  <div class="section-label">A FEW THINGS I'VE BUILT</div>
+  <div class="section-label">COLLEGE PROJECTS</div>
   <div class="log">
 
     <div class="entry">
-      <span class="when">2026 · Published, World Journal of Engineering &amp; Technology</span>
-      <h3>Automated light-responsive blinds controller</h3>
-      <p>
-        Co-designed a system that reads ambient light and adjusts blinds automatically,
-        combining sensors, control logic, and hardware to cut energy use and keep a room
-        comfortable without anyone touching a switch.
-      </p>
-    </div>
-
-    <div class="entry">
       <span class="when">2025 · Duke Engineering Project</span>
-      <h3>ADHD medication reminder system</h3>
-      <p>
-        Built a low-friction reminder device for people with ADHD: a dock that flashes and
-        sounds, paired with a wristband that vibrates and only stops the alert once it's
-        tapped against an NFC scanner. Runs on ESP32 microcontrollers over Bluetooth Low Energy.
-      </p>
+      <h3>ADHD Medication Reminder System</h3>
+      <a class="view-btn" href="#" target="_blank" rel="noopener">View Project</a>
     </div>
 
     <div class="entry">
-      <span class="when">2022 – 2024 · Software Architect, Next Gen Technology 360</span>
-      <h3>Two apps, one $3,000 prize</h3>
-      <p>
-        Built Ninja Tax, which helps first-time filers find deductions, and Shelf-Sense, an
-        AI-powered inventory tracker. Both were invited to exhibit at Synapse Summit,
-        Florida's largest innovation conference.
-      </p>
+      <span class="when">Duke</span>
+      <h3>NYC Congestion Website</h3>
+      <a class="view-btn" href="#" target="_blank" rel="noopener">View Project</a>
     </div>
+
+    <div class="entry">
+      <span class="when">2026 · World Journal of Engineering &amp; Technology</span>
+      <h3>Automated Light-Responsive Blinds Controller — Publication</h3>
+      <a class="view-btn" href="#" target="_blank" rel="noopener">View Project</a>
+    </div>
+
+  </div>
+
+  <div class="section-label">HIGH SCHOOL PROJECTS</div>
+  <div class="log">
 
     <div class="entry">
       <span class="when">2021 – 2025 · Captain, FTC Robotics Team 516</span>
-      <h3>World Championship, Houston</h3>
-      <p>
-        Led the team from regional to state to the FTC World Championship, writing the
-        autonomous stack: object detection, odometry, and gyroscope-based turning.
-      </p>
+      <h3>Robotics — World Championship, Houston</h3>
+      <a class="view-btn" href="#" target="_blank" rel="noopener">View Project</a>
+    </div>
+
+    <div class="entry">
+      <span class="when">2022 – 2023 · Next Gen Technology 360</span>
+      <h3>Ninja Tax</h3>
+      <a class="view-btn" href="#" target="_blank" rel="noopener">View Project</a>
+    </div>
+
+    <div class="entry">
+      <span class="when">2023 – 2024 · Next Gen Technology 360</span>
+      <h3>Shelf-Sense</h3>
+      <a class="view-btn" href="#" target="_blank" rel="noopener">View Project</a>
     </div>
 
   </div>
@@ -337,4 +293,6 @@
 </section>
 
 </body>
+</html>
+
 </html>
