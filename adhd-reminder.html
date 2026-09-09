@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADHD Medication Reminder System — Trevor Foster</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0f1b2b;
+    --panel: #16273a;
+    --panel-line: #2a3f56;
+    --text: #e7ecf1;
+    --muted: #8ea0b5;
+    --amber: #e8a23d;
+    --teal: #5fb3ac;
+    --red: #d9695f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(232, 162, 61, 0.07), transparent 42%),
+      radial-gradient(circle at 88% 78%, rgba(95, 179, 172, 0.08), transparent 45%),
+      radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+    background-size: auto, auto, 26px 26px;
+    background-position: 0 0, 0 0, -1px -1px;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 72px 28px 96px;
+  }
+
+  .back {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--teal);
+    text-decoration: none;
+    margin-bottom: 40px;
+    border-bottom: 1px solid transparent;
+  }
+  .back:hover, .back:focus-visible { border-bottom-color: var(--teal); }
+
+  .when {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.15;
+    font-weight: 600;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .role-line {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .role-line span { color: var(--amber); }
+
+  .trace {
+    width: 64px;
+    height: 3px;
+    background: var(--teal);
+    margin-bottom: 28px;
+  }
+
+  .lede {
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: #c7d1dc;
+    max-width: 68ch;
+    margin: 0 0 12px;
+  }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--teal);
+    letter-spacing: 0.08em;
+    margin: 56px 0 18px;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 6px;
+    padding: 24px;
+  }
+
+  p.body-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #c7d1dc;
+    margin: 0 0 14px;
+  }
+  p.body-text:last-child { margin-bottom: 0; }
+
+  /* stat / chip row */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--teal);
+    border: 1px solid var(--panel-line);
+    background: rgba(95, 179, 172, 0.06);
+    border-radius: 999px;
+    padding: 6px 12px;
+  }
+
+  /* image grid */
+  .figure {
+    margin: 0 0 8px;
+  }
+  .figure img, .figure video {
+    width: 100%;
+    display: block;
+    border-radius: 6px;
+    border: 1px solid var(--panel-line);
+  }
+  .figure figcaption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 8px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 8px;
+  }
+
+  /* hero demo video */
+  .hero-figure {
+    margin: 36px 0 0;
+  }
+
+  /* process timeline (reuse dot-log pattern) */
+  .log {
+    border-left: 2px solid var(--panel-line);
+    padding-left: 24px;
+  }
+  .entry {
+    position: relative;
+    padding-bottom: 24px;
+  }
+  .entry:last-child { padding-bottom: 0; }
+  .entry::before {
+    content: '';
+    position: absolute;
+    left: -29px;
+    top: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--amber);
+  }
+  .entry h4 {
+    font-size: 15.5px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: var(--text);
+  }
+  .entry p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  /* results table */
+  table.results {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  table.results th, table.results td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--panel-line);
+    color: #c7d1dc;
+  }
+  table.results th {
+    color: var(--teal);
+    font-weight: 500;
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+  }
+  table.results tr:last-child td { border-bottom: none; }
+  .medal { color: var(--amber); }
+
+  /* design goals chips */
+  .goal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .goal {
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 6px;
+    padding: 16px;
+    font-size: 13.5px;
+    color: #c7d1dc;
+    text-align: center;
+  }
+
+  /* future work list */
+  ul.future {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  ul.future li {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: #c7d1dc;
+    padding-left: 22px;
+    position: relative;
+    margin-bottom: 8px;
+  }
+  ul.future li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--amber);
+  }
+
+  .team-list {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+  .team-list strong { color: var(--text); font-weight: 500; }
+
+  @media (max-width: 700px) {
+    .page { padding: 48px 20px 64px; }
+    .grid-2, .grid-3, .goal-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <a class="back" href="index.html">&larr; back to projects</a>
+
+    <span class="when">2025 · Duke Engineering Project (EGR 101, Fall 2025)</span>
+    <h1>AREMIND — ADHD Medication Reminder System</h1>
+    <div class="role-line">Role: <span>Engineer</span> · Team of 5 + TA</div>
+    <div class="trace"></div>
+
+    <p class="lede">
+      A smart, multisensory reminder system that turns medication into a daily habit
+      rather than a chore. AREMIND combines a light-and-vibration bottle topper,
+      an RFID tap-to-confirm dock, a companion wristband, and a web-based scheduler
+      to help adults with ADHD build consistent medication routines.
+    </p>
+
+    <div class="hero-figure figure">
+      <video controls preload="metadata" poster="images/final-prototype-laptop.png">
+        <source src="images/product-demo.mp4" type="video/mp4">
+        Your browser doesn't support embedded video. <a href="images/product-demo.mp4">Download the demo video</a>.
+      </video>
+      <figcaption>Product demo — the bottle topper glows red for an active reminder; tapping the RFID key fob on the reader confirms the dose.</figcaption>
+    </div>
+
+    <!-- PROBLEM -->
+    <div class="section-label">THE PROBLEM</div>
+    <div class="panel">
+      <p class="body-text">
+        ADHD makes it hard to remember routine tasks like taking medication. Missed
+        doses aren't usually about not caring — they're about forgetfulness, distraction,
+        and inconsistent daily routines. Existing solutions (phone alarms, pill organizers)
+        are easy to ignore or don't fit into how people with ADHD actually build habits.
+      </p>
+      <div class="chips">
+        <span class="chip">WHO — Adults with ADHD</span>
+        <span class="chip">WHAT — Reliable medication reminders</span>
+        <span class="chip">WHY — Prevent missed doses</span>
+      </div>
+    </div>
+
+    <!-- DESIGN GOALS -->
+    <div class="section-label">DESIGN GOALS</div>
+    <div class="goal-grid">
+      <div class="goal">Minimal added cognitive effort</div>
+      <div class="goal">Habit building</div>
+      <div class="goal">Tactile reminder</div>
+      <div class="goal">Visual reminder</div>
+      <div class="goal">Lifestyle integrated</div>
+      <div class="goal">Personalizable</div>
+    </div>
+
+    <!-- PROCESS -->
+    <div class="section-label">DESIGN PROCESS</div>
+    <div class="log">
+      <div class="entry">
+        <h4>Ideation</h4>
+        <p>Brainstormed a wide range of concepts spanning app-only, wearable, and physical device approaches.</p>
+      </div>
+      <div class="entry">
+        <h4>Screening</h4>
+        <p>Scored 10 early pill-holder concepts against feasibility, cost, durability, ease of use, and effectiveness — narrowed down to the strongest directions.</p>
+      </div>
+      <div class="entry">
+        <h4>Scoring (Pugh Matrix)</h4>
+        <p>Weighted six finalist concepts against alert effectiveness, detectability, timing/tracking, setup time, and cost.</p>
+      </div>
+      <div class="entry">
+        <h4>Morphing</h4>
+        <p>Combined the best sub-functions across concepts into five full solution candidates.</p>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:28px;">
+      <figure class="figure">
+        <img src="images/screening-matrix.png" alt="Pill holder screening matrix">
+        <figcaption>Screening matrix — early pill-holder concepts scored against five criteria.</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="images/morphological-chart.png" alt="Morphological combination chart">
+        <figcaption>Morphological chart — combining sub-solutions into five full concepts (App Only, Bottle Topper, Docking Device, Wearable Band, Pager).</figcaption>
+      </figure>
+    </div>
+
+    <!-- DECISION -->
+    <div class="section-label">CONCEPT SELECTION</div>
+    <div class="panel">
+      <p class="body-text">
+        We weighted alert effectiveness and detectability highest, since a reminder
+        that isn't noticed defeats the purpose. The <strong style="color:var(--text)">Bottle Topper</strong> won
+        clearly — it scored best on the criteria that mattered most while staying
+        cheap and easy to set up.
+      </p>
+      <table class="results" style="margin-top:16px;">
+        <tr><th>Concept</th><th>Score</th></tr>
+        <tr><td><span class="medal">🥇</span> Bottle Topper</td><td>4.8</td></tr>
+        <tr><td><span class="medal">🥈</span> Docking Device</td><td>3.8</td></tr>
+        <tr><td><span class="medal">🥉</span> Wearable Band</td><td>3.5</td></tr>
+        <tr><td>Handheld Device</td><td>3.2</td></tr>
+        <tr><td>Medical Prompt</td><td>3.2</td></tr>
+        <tr><td>App Only Configuration</td><td>2.5</td></tr>
+      </table>
+    </div>
+    <figure class="figure" style="margin-top:20px;">
+      <img src="images/pugh-matrix.png" alt="Pugh decision matrix">
+      <figcaption>Pugh Matrix — weighted scoring across alert effectiveness, detectability, timing/tracking, ease of use, and cost.</figcaption>
+    </figure>
+
+    <!-- PROTOTYPING -->
+    <div class="section-label">PROTOTYPING</div>
+    <p class="body-text" style="max-width:68ch;">
+      The design went through several rounds of physical prototyping — from a hand-cut
+      cardboard mockup to a breadboarded electronics version to a final 3D-printed
+      enclosure — alongside parallel iterations of the wristband and the web scheduler.
+    </p>
+
+    <div class="grid-3" style="margin-top:20px;">
+      <figure class="figure">
+        <img src="images/cardboard-prototype.png" alt="Cardboard low-fidelity prototype">
+        <figcaption>V1 — cardboard mockup testing the topper form factor.</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="images/breadboard-prototype.png" alt="Breadboard electronics prototype">
+        <figcaption>V2 — breadboarded electronics with the real pill bottle.</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="images/enclosure-3dprint.png" alt="Final 3D printed enclosure">
+        <figcaption>V3 — 3D-printed enclosure with top bottle port and wiring access window.</figcaption>
+      </figure>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <figure class="figure">
+        <img src="images/wristband-cad.png" alt="Wristband CAD model">
+        <figcaption>Wristband CAD model — soft-edged band designed for a comfortable, low-profile fit.</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="images/wristband-fabric.png" alt="Fabric wristband prototype">
+        <figcaption>Fabric wristband prototype with Velcro closure.</figcaption>
+      </figure>
+    </div>
+
+    <figure class="figure" style="margin-top:20px; max-width:420px;">
+      <img src="images/wristband-closeup.jpeg" alt="Close-up of finished wristband with embedded module">
+      <figcaption>Finished wristband — embedded module housed in the fabric strap.</figcaption>
+    </figure>
+
+    <!-- SOFTWARE -->
+    <div class="section-label">SOFTWARE — REMINDER SCHEDULER</div>
+    <p class="body-text" style="max-width:68ch;">
+      Alongside the hardware, we designed and built a companion web app for setting
+      up and personalizing reminders. It started as hand-drawn wireframes mapping
+      out account creation, a calendar view, and per-dose time tracking, then went
+      through two working iterations of the actual interface.
+    </p>
+
+    <figure class="figure" style="margin-top:20px;">
+      <img src="images/wireframes.png" alt="Hand drawn app wireframes">
+      <figcaption>Wireframes — login/signup, home screen, calendar, and dose-time entry flow.</figcaption>
+    </figure>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <figure class="figure">
+        <img src="images/webapp-v1.png" alt="Reminder scheduler web app, first version">
+        <figcaption>V1 — early Reminder Scheduler build with per-day schedule and device sync.</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="images/webapp-v2.png" alt="Reminder scheduler web app, refined version">
+        <figcaption>V2 — refined UI with a 24-hour time toggle, "Select All Days," and clearer device controls.</figcaption>
+      </figure>
+    </div>
+
+    <!-- FINAL SYSTEM -->
+    <div class="section-label">FINAL SYSTEM</div>
+    <div class="panel">
+      <p class="body-text">
+        The finished prototype pairs a 3D-printed bottle topper (light + vibration +
+        RFID reader) with a soft wristband and the web-based scheduler. When a dose
+        is due, the topper lights up and vibrates; the user taps their RFID key fob
+        on the reader to confirm the dose and reset the reminder — closing the loop
+        between reminder, action, and reward.
+      </p>
+    </div>
+    <figure class="figure" style="margin-top:20px;">
+      <img src="images/final-prototype-laptop.png" alt="Final assembled prototype with laptop running the scheduler">
+      <figcaption>Final assembled system — bottle topper, wristband, and RFID key fob, alongside the Reminder Scheduler web app.</figcaption>
+    </figure>
+
+    <!-- TESTING -->
+    <div class="section-label">TESTING PLAN</div>
+    <div class="panel">
+      <table class="results">
+        <tr><th>Test Target</th><th>Success Criteria</th></tr>
+        <tr><td>Detectability</td><td>Alerts noticed by &gt;90% of users</td></tr>
+        <tr><td>Setup Time</td><td>First-time setup completed in &lt;30s</td></tr>
+        <tr><td>Connectivity Range</td><td>Bluetooth remains stable up to 30m</td></tr>
+        <tr><td>Battery Life</td><td>Operates &gt;4 days with &lt;10% power loss</td></tr>
+        <tr><td>Durability</td><td>Survives 5 drops from 1m with no damage</td></tr>
+      </table>
+    </div>
+
+    <!-- FUTURE WORK -->
+    <div class="section-label">FUTURE WORK</div>
+    <ul class="future">
+      <li>High-fidelity prototype</li>
+      <li>Wristband upgraded with an ESP32 mini for standalone operation</li>
+      <li>BLE connection between the bottle module and wristband</li>
+      <li>Larger-scale LED light implementation for better detectability</li>
+    </ul>
+
+    <!-- SUMMARY -->
+    <div class="section-label">SUMMARY</div>
+    <p class="body-text" style="max-width:68ch;">
+      This was a multi-faceted problem — forgetfulness, distraction, and inconsistent
+      routines — met with a multi-faceted, personalizable solution combining touch,
+      light, and habit reinforcement across hardware and software.
+    </p>
+
+    <!-- TEAM -->
+    <div class="section-label">TEAM</div>
+    <div class="team-list">
+      <strong>Theo Brundin</strong> — Engineer<br>
+      <strong>Maxwell Khor</strong> — Engineer<br>
+      <strong>Sebastian Guaqueta Jaar</strong> — Engineer<br>
+      <strong>Trevor Foster</strong> — Engineer<br>
+      <strong>Andrew Lee</strong> — Engineer<br>
+      <strong>Matthew Lyons</strong> — TA
+    </div>
+
+  </div>
+</body>
+</html>
