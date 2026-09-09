@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automated Light-Responsive Blinds Controller — Publication — Trevor Foster</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0f1b2b;
+    --panel: #16273a;
+    --panel-line: #2a3f56;
+    --text: #e7ecf1;
+    --muted: #8ea0b5;
+    --amber: #e8a23d;
+    --teal: #5fb3ac;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(232, 162, 61, 0.07), transparent 42%),
+      radial-gradient(circle at 88% 78%, rgba(95, 179, 172, 0.08), transparent 45%),
+      radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+    background-size: auto, auto, 26px 26px;
+    background-position: 0 0, 0 0, -1px -1px;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 72px 28px 96px;
+  }
+  .back {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--teal);
+    text-decoration: none;
+    margin-bottom: 40px;
+    border-bottom: 1px solid transparent;
+  }
+  .back:hover, .back:focus-visible { border-bottom-color: var(--teal); }
+  .when {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.15;
+    font-weight: 600;
+    margin: 0 0 28px;
+    letter-spacing: -0.01em;
+    max-width: 26ch;
+  }
+  p.lede {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #c7d1dc;
+    max-width: 66ch;
+    margin: 0 0 48px;
+  }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--teal);
+    letter-spacing: 0.08em;
+    margin: 0 0 14px;
+  }
+  .block {
+    margin-bottom: 48px;
+  }
+  .block p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #b9c5d2;
+    max-width: 66ch;
+    margin: 0 0 16px;
+  }
+  .media-panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 4px;
+    padding: 16px;
+  }
+  .media-panel img,
+  .media-panel video {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+  }
+  .media-panel.tight img {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 12px;
+    text-align: center;
+  }
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--panel-line);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-row .k { color: var(--muted); }
+  .stat-row .v { color: var(--amber); }
+  .pub-link {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--amber);
+    background: transparent;
+    border: 1px solid var(--amber);
+    border-radius: 3px;
+    padding: 9px 16px;
+    text-decoration: none;
+    margin-bottom: 48px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .pub-link:hover,
+  .pub-link:focus-visible {
+    background: var(--amber);
+    color: var(--bg);
+  }
+  .pub-link:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
+  }
+  @media (max-width: 600px) {
+    .page { padding: 48px 20px 64px; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <a class="back" href="index.html">&larr; back to who am i</a>
+    <span class="when">2026 · World Journal of Engineering &amp; Technology</span>
+    <h1>Automated Light-Responsive Blinds Controller</h1>
+    <p class="lede">
+      A self-adjusting blinds system that reads ambient light and drives a stepper motor
+      to open or close the blinds automatically — reducing energy use and removing the
+      need for anyone to touch a switch. The design and results were published in the
+      World Journal of Engineering &amp; Technology.
+    </p>
+    <a class="pub-link" href="https://www.scirp.org/journal/paperinformation?paperid=152228" target="_blank" rel="noopener">Read the Full Publication</a>
+
+    <div class="block">
+      <div class="section-label">OVERVIEW</div>
+      <p>
+        The system pairs a photoresistor with an Arduino Uno to continuously sense ambient
+        light levels in a room. When light crosses a set threshold, the microcontroller
+        drives a ULN2003 motor driver, which steps a small stepper motor connected to the
+        blinds' twist rod — opening the blinds in bright conditions and closing them as
+        light fades, with no manual input required.
+      </p>
+    </div>
+
+    <div class="block">
+      <div class="section-label">CIRCUIT DESIGN</div>
+      <p>
+        The Arduino is powered by a 4×AA battery pack and reads the photoresistor through
+        an analog input, using a voltage-divider resistor to convert light intensity into
+        a readable signal. Digital outputs drive the ULN2003 driver board, which supplies
+        the current needed to turn the stepper motor — isolating the Arduino's low-power
+        logic pins from the motor's higher current draw.
+      </p>
+      <div class="media-panel">
+        <img src="assets/circuit-diagram.png" alt="Circuit diagram showing an Arduino Uno, photoresistor, ULN2003 driver board, stepper motor, and 4xAA battery pack wired together">
+      </div>
+      <div class="caption">Full circuit schematic — Arduino Uno, photoresistor, ULN2003 driver, stepper motor</div>
+    </div>
+
+    <div class="block">
+      <div class="section-label">TORQUE CALCULATIONS</div>
+      <p>
+        Before finalizing the motor choice, I worked through the torque required to twist
+        the blinds' rod against its own weight, then compared that against the stepper
+        motor's rated torque to confirm it had enough headroom — including a fudge factor
+        for real-world friction and non-ideal conditions.
+      </p>
+      <div class="media-panel tight">
+        <img src="assets/torque-calculations.png" alt="Handwritten torque calculations for the blinds twist stick and stepper motor">
+      </div>
+      <div class="stack" style="margin-top: 16px;">
+        <div class="stat-row"><span class="k">Required torque</span><span class="v">0.00933 N·m</span></div>
+        <div class="stat-row"><span class="k">Motor rated torque</span><span class="v">0.03 N·m</span></div>
+        <div class="stat-row"><span class="k">Safety margin</span><span class="v">~3.2×</span></div>
+        <div class="stat-row"><span class="k">Fudge factor applied</span><span class="v">2–3×</span></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="section-label">DEMO</div>
+      <p>
+        The blinds opening and closing in response to the light-based trigger, driven end
+        to end by the circuit above.
+      </p>
+      <div class="media-panel">
+        <video controls preload="metadata" poster="">
+          <source src="assets/opening-closing.mp4" type="video/mp4">
+          Your browser does not support embedded video.
+        </video>
+      </div>
+      <div class="caption">Opening and closing sequence, live demo</div>
+    </div>
+
+  </div>
+</body>
+</html>
